@@ -1,7 +1,0 @@
-<Solution>
-  <Configurations>
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
-  <Project Path="TinyFactory.vcxproj" Id="ea9e7cda-6417-4176-9075-84537c6b0e8a" />
-</Solution>

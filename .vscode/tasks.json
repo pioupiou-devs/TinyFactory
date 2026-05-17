@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build tiny factory",
+            "type": "shell",
+            "command": "cl.exe",
+            "args": [
+                "/std:c++17",
+                "/Zi",
+                "/EHsc",
+                "/nologo",
+                "src\\main.cpp",
+                "src\\GridSystem.cpp",
+                "/Fe:build\\TinyFactory.exe"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
