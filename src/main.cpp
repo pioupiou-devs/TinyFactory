@@ -30,12 +30,13 @@ void Render(GridSystem &g)
 void ProcessInput(GridSystem &g, bool &running)
 {
     std::string command;
+    char building;
     int x, y;
 
-    std::cin >> command >> x >> y;
+    std::cin >> command >> building >> x >> y;
 
     if (command == "place")
-        g.setCell(x, y, 'M');
+        g.setCell(x, y, building);
     else if (command == "exit")
         running = false;
 }
