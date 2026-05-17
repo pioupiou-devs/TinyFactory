@@ -11,6 +11,7 @@ public:
     void initialize();
     void render();
     void setCell(int x, int y, char value);
+    void tick();
 
 private:
     static constexpr int SIZE = 10;
@@ -18,4 +19,5 @@ private:
     static constexpr char MINER_CELL = 'M';
 
     std::vector<std::vector<char>> grid;
+    std::vector<std::vector<int>> ore;
 };

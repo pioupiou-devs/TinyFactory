@@ -9,7 +9,6 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
             "console": "integratedTerminal",
             "preLaunchTask": "build tiny factory"
         }

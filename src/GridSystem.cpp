@@ -9,17 +9,23 @@ void GridSystem::initialize()
 {
     grid = std::vector<std::vector<char>>(
         SIZE,
-        std::vector<char>(SIZE, EMPTY_CELL)
-    );
+        std::vector<char>(SIZE, EMPTY_CELL));
+    ore = std::vector<std::vector<int>>(
+        SIZE,
+        std::vector<int>(SIZE, 0));
 }
 
 void GridSystem::render()
 {
-    for (const auto& line : grid)
+    for (size_t x = 0; x < grid.size(); x++)
     {
-        for (char val : line)
+        const auto &line = grid[x];
+        for (size_t y = 0; y < line.size(); y++)
         {
-            std::cout << val << '\t';
+            std::cout << line[y];
+            if (line[y] == MINER_CELL)
+                std::cout << '(' << ore[x][y] << ')';
+            std::cout << '\t';
         }
         std::cout << '\n';
     }
@@ -40,4 +46,17 @@ void GridSystem::setCell(int x, int y, char value)
     }
 
     grid[x][y] = value;
+}
+
+void GridSystem::tick()
+{
+    for (size_t x = 0; x < grid.size(); x++)
+    {
+        const auto &line = grid[x];
+        for (size_t y = 0; y < line.size(); y++)
+        {
+            if (line[y] == MINER_CELL)
+                ore[x][y]++;
+        }
+    }
 }

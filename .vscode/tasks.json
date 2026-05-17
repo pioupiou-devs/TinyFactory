@@ -2,18 +2,37 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "clean",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-Command",
+                "if (Test-Path build) { Remove-Item build -Recurse -Force }; New-Item -ItemType Directory -Path build | Out-Null"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "build tiny factory",
             "type": "shell",
+            "dependsOn": "clean",
             "command": "cl.exe",
             "args": [
-                "/std:c++17",
-                "/Zi",
+                "/std:c++20",
+                "/W4",
                 "/EHsc",
-                "/nologo",
+                "/Zi",
+
                 "src\\main.cpp",
                 "src\\GridSystem.cpp",
-                "/Fe:build\\TinyFactory.exe"
+
+                "/Febuild\\TinyFactory.exe"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "problemMatcher": "$msCompile",
             "group": {
                 "kind": "build",

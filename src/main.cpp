@@ -1,24 +1,41 @@
 #include <iostream>
 #include "GridSystem.h"
+#include "main.h"
 
 int main()
 {
+    bool running = true;
     GridSystem g;
 
-    while (true)
+    while (running)
     {
-        std::cout << "----------------------\n\n";
-        g.render();
-        std::cout << "----------------------\n";
+        // Take user input
+        ProcessInput(g, running);
 
-        std::string command;
-        int x, y;
+        // Tick
+        g.tick();
 
-        std::cin >> command >> x >> y;
-
-        if (command == "place")
-            g.setCell(x, y, 'M');
-        else
-            std::cerr << "Invalid command\n";
+        // Render
+        Render(g);
     }
+}
+
+void Render(GridSystem &g)
+{
+    std::cout << "----------------------\n\n";
+    g.render();
+    std::cout << "----------------------\n";
+}
+
+void ProcessInput(GridSystem &g, bool &running)
+{
+    std::string command;
+    int x, y;
+
+    std::cin >> command >> x >> y;
+
+    if (command == "place")
+        g.setCell(x, y, 'M');
+    else if (command == "exit")
+        running = false;
 }
