@@ -7,15 +7,9 @@ GridSystem::GridSystem()
 
 void GridSystem::initialize()
 {
-    grid = std::vector<std::vector<char>>(
+    grid = std::vector<std::vector<Cell>>(
         SIZE,
-        std::vector<char>(SIZE, EMPTY_CELL));
-    inventory = std::vector<std::vector<int>>(
-        SIZE,
-        std::vector<int>(SIZE, 0));
-    nextInventory = std::vector<std::vector<int>>(
-        SIZE,
-        std::vector<int>(SIZE, 0));
+        std::vector<Cell>(SIZE, Cell()));
 }
 
 void GridSystem::render()
@@ -25,43 +19,46 @@ void GridSystem::render()
         const auto &line = grid[x];
         for (size_t y = 0; y < line.size(); y++)
         {
-            std::cout << line[y];
-            if (line[y] == CONVEYOR_CELL || line[y] == MINER_CELL)
-                std::cout << '(' << inventory[x][y] << ')';
+            std::cout << ((Cell)line[y]).toString();
             std::cout << '\t';
         }
         std::cout << '\n';
     }
 }
 
-void GridSystem::setCell(int x, int y, char value)
+void GridSystem::setCell(size_t x, size_t y, char type)
 {
     if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
     {
         std::cerr << "Out of bounds\n";
         return;
     }
-
-    if (value != MINER_CELL && value != CONVEYOR_CELL)
+    CellType cType = Cell::getTypeFromChar(type);
+    if (cType != CellType::MINER && cType != CellType::CONVEYOR)
     {
-        std::cerr << "Invalid value\n";
+        std::cerr << "Invalid type\n";
         return;
     }
 
-    grid[x][y] = value;
+    grid[x][y] = Cell(type);
+}
+
+Cell GridSystem::getCell(size_t x, size_t y)
+{
+    return grid[x][y];
 }
 
 void GridSystem::tick()
 {
     // reset buffer
-    nextInventory = inventory;
+    nextGrid = grid;
 
     // 1. miners produce
     for (size_t x = 0; x < grid.size(); x++)
     {
         for (size_t y = 0; y < grid[x].size(); y++)
         {
-            if (grid[x][y] == MINER_CELL)
+            if (grid[x][y].getType() == CellType::MINER)
                 tickMiner(x, y);
         }
     }
@@ -71,49 +68,68 @@ void GridSystem::tick()
     {
         for (size_t y = 0; y < grid[x].size(); y++)
         {
-            if (grid[x][y] == CONVEYOR_CELL)
+            if (grid[x][y].getType() == CellType::CONVEYOR)
                 tickConveyor(x, y);
         }
     }
 
     // 3. commit
-    inventory = nextInventory;
+    grid = nextGrid;
 }
 
 void GridSystem::tickMiner(size_t x, size_t y)
 {
-    nextInventory[x][y]++;
+    int val = grid[x][y].getValue();
+    nextGrid[x][y].setValue(++val);
 }
 
 void GridSystem::tickConveyor(size_t x, size_t y)
 {
-    switch (getLeftType(x, y))
-    {
-    case MINER_CELL:
-        moveOreFromLeft(x, y);
-        break;
-    case CONVEYOR_CELL:
-        moveOreFromLeft(x, y);
-        break;
-
-    default:
-        break;
-    }
+    Cell cell = grid[x][y];
+    moveOreFromDirection(x, y);
 }
 
-void GridSystem::moveOreFromLeft(size_t x, size_t y)
+void GridSystem::moveOreFromDirection(size_t x, size_t y)
 {
-    if (inventory[x][y - 1] <= 0)
+    Cell cell = getCell(x, y);
+
+    std::pair neighborPos = getLinkedNeighborPosition(x, y, cell.getDirection());
+
+    Cell neighbor = getCell(neighborPos.first, neighborPos.second);
+    if (neighbor.getValue() <= 0)
         return;
 
-    nextInventory[x][y - 1]--;
-    nextInventory[x][y] += 1;
+    int v1 = neighbor.getValue();
+    neighbor.setValue(v1 - 1);
+    nextGrid[neighborPos.first][neighborPos.second] = neighbor;
+
+    int v2 = cell.getValue();
+    cell.setValue(v2 + 1);
+    nextGrid[x][y] = cell;
 }
 
-char GridSystem::getLeftType(size_t x, size_t y)
+std::pair<int, int> GridSystem::getLinkedNeighborPosition(size_t x, size_t y, Direction dir)
 {
-    if (y == 0)
-        return EMPTY_CELL;
+    switch (dir)
+    {
+    default:
+    case Direction::RIGHT:
+        if (y > 0)
+            return std::pair(x, y - 1);
+        break;
+    case Direction::DOWN:
+        if (x <= SIZE)
+            return std::pair(x + 1, y);
+        break;
+    case Direction::LEFT:
+        if (y <= SIZE)
+            return std::pair(x, y + 1);
+        break;
+    case Direction::UP:
+        if (x > 0)
+            return std::pair(x - 1, y);
+        break;
+    }
 
-    return grid[x][y - 1];
+    return std::pair(-1, -1);
 }

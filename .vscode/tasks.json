@@ -27,6 +27,7 @@
 
                 "src\\main.cpp",
                 "src\\GridSystem.cpp",
+                "src\\Cell.cpp",
 
                 "/Febuild\\TinyFactory.exe"
             ],

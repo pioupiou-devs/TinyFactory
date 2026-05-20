@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include "Cell.h"
 
 class GridSystem
 {
@@ -10,22 +11,18 @@ public:
 
     void initialize();
     void render();
-    void setCell(int x, int y, char value);
+    void setCell(size_t x, size_t y, char value);
+    Cell getCell(size_t x, size_t y);
     void tick();
     void tickMiner(size_t x, size_t y);
     void tickConveyor(size_t x, size_t y);
-
-    void moveOreFromLeft(size_t x, size_t y);
+    void moveOreFromDirection(size_t x, size_t y);
 
 private:
     static constexpr int SIZE = 10;
-    static constexpr char EMPTY_CELL = '.';
-    static constexpr char MINER_CELL = 'M';
-    static constexpr char CONVEYOR_CELL = '>';
 
-    std::vector<std::vector<char>> grid;
-    std::vector<std::vector<int>> inventory;
-    std::vector<std::vector<int>> nextInventory;
+    std::vector<std::vector<Cell>> grid;
+    std::vector<std::vector<Cell>> nextGrid;
 
-    char getLeftType(size_t x, size_t y);
+    std::pair<int, int> getLinkedNeighborPosition(size_t x, size_t y, Direction dir);
 };
