@@ -43,7 +43,7 @@ void GridSystem::setCell(size_t x, size_t y, char type)
     grid[x][y] = Cell(type);
 }
 
-Cell GridSystem::getCell(size_t x, size_t y)
+const Cell& GridSystem::getCell(size_t x, size_t y)
 {
     return grid[x][y];
 }
@@ -85,7 +85,6 @@ void GridSystem::tickMiner(size_t x, size_t y)
 
 void GridSystem::tickConveyor(size_t x, size_t y)
 {
-    Cell cell = grid[x][y];
     moveOreFromDirection(x, y);
 }
 
@@ -118,11 +117,11 @@ std::pair<int, int> GridSystem::getLinkedNeighborPosition(size_t x, size_t y, Di
             return std::pair(x, y - 1);
         break;
     case Direction::DOWN:
-        if (x <= SIZE)
+        if (x < SIZE)
             return std::pair(x + 1, y);
         break;
     case Direction::LEFT:
-        if (y <= SIZE)
+        if (y < SIZE)
             return std::pair(x, y + 1);
         break;
     case Direction::UP:

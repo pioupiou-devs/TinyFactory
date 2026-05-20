@@ -12,7 +12,7 @@ public:
     void initialize();
     void render();
     void setCell(size_t x, size_t y, char value);
-    Cell getCell(size_t x, size_t y);
+    const Cell& getCell(size_t x, size_t y);
     void tick();
     void tickMiner(size_t x, size_t y);
     void tickConveyor(size_t x, size_t y);
