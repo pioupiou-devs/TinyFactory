@@ -1,15 +1,9 @@
 #include "GridSystem.h"
 
-GridSystem::GridSystem()
+GridSystem::GridSystem() : grid(std::vector<std::vector<Cell>>(
+                               SIZE,
+                               std::vector<Cell>(SIZE, Cell())))
 {
-    initialize();
-}
-
-void GridSystem::initialize()
-{
-    grid = std::vector<std::vector<Cell>>(
-        SIZE,
-        std::vector<Cell>(SIZE, Cell()));
 }
 
 void GridSystem::render()
@@ -43,7 +37,7 @@ void GridSystem::setCell(size_t x, size_t y, char type)
     grid[x][y] = Cell(type);
 }
 
-const Cell& GridSystem::getCell(size_t x, size_t y)
+const Cell &GridSystem::getCell(size_t x, size_t y)
 {
     return grid[x][y];
 }

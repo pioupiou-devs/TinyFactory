@@ -9,7 +9,6 @@ class GridSystem
 public:
     GridSystem();
 
-    void initialize();
     void render();
     void setCell(size_t x, size_t y, char value);
     const Cell& getCell(size_t x, size_t y);

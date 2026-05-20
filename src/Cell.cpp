@@ -1,17 +1,11 @@
 #include "Cell.h"
 
-Cell::Cell()
+Cell::Cell() : type(CellType::EMPTY), direction(Direction::NONE), value(0)
 {
-    Cell::type = CellType::EMPTY;
-    Cell::direction = Direction::NONE;
-    Cell::value = 0;
 }
 
-Cell::Cell(char building, int value)
+Cell::Cell(char building, int value_) : type(getTypeFromChar(building)), direction(getDirectionFromChar(building)), value(value_)
 {
-    Cell::type = getTypeFromChar(building);
-    Cell::direction = getDirectionFromChar(building);
-    Cell::value = value;
 }
 
 CellType Cell::getType()
