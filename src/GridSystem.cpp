@@ -86,6 +86,9 @@ void GridSystem::moveOreFromDirection(size_t x, size_t y)
 {
     Cell cell = getCell(x, y);
 
+    if (nextGrid[x][y].getValue() >= CONVEYOR_CAPACITY)
+        return;
+
     std::pair neighborPos = getLinkedNeighborPosition(x, y, cell.getDirection());
 
     Cell neighbor = getCell(neighborPos.first, neighborPos.second);

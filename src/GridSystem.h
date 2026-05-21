@@ -19,6 +19,7 @@ public:
 
 private:
     static constexpr int SIZE = 10;
+    static constexpr int CONVEYOR_CAPACITY = 1;
 
     std::vector<std::vector<Cell>> grid;
     std::vector<std::vector<Cell>> nextGrid;
