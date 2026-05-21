@@ -126,6 +126,4 @@ std::pair<int, int> GridSystem::getLinkedNeighborPosition(size_t x, size_t y, Di
             return std::pair(x - 1, y);
         break;
     }
-
-    return std::pair(-1, -1);
 }
